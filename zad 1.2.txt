@@ -1,0 +1,41 @@
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+
+
+
+int main(int argc, char*argv[]){
+
+
+
+    if(argc == 1) {
+        fprintf(stderr, "Not enough arguments...EXITING\n");
+        exit(1);
+    }
+
+    for(int j = 1; j < argc; j++) {
+    int fd = open(argv[j], O_RDONLY);
+    char c = '1';
+
+    char buff[250];
+    int n = 0;
+    int i = 0;
+    while((1 == read(fd, &c, 1)) && n<=10) {
+            buff[i] = c;
+            if(c == '\n') {
+                n++;
+            }
+            i++;
+    }
+    buff[i+1] = '\0';
+    write(1, buff, i);
+    close(fd);
+    }
+    
+
+    return 0;
+}

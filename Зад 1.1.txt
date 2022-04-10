@@ -1,0 +1,44 @@
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int main(int argc, char*argv[]){
+
+    char buff[BUFSIZ];
+    ssize_t redBytes;
+
+
+    if(argc == 2) {
+        while((redBytes = read(0, buff, BUFSIZ)) > 0) {
+            write(1, buff, redBytes);
+        }
+    } else {
+        
+        for (int i = 2; i <= argc; i++) {
+
+            int fd = open(argv[i], O_RDONLY);
+            if(fd == -1) {
+                fprintf(stderr, "Couldnt open file for reading");
+                exit(1);
+            }
+
+            if((redBytes = read(fd, buff, BUFSIZ)) > 0) {
+            write(1, buff, redBytes);
+            } else {
+                fprintf(stderr, "Could open file for reading");
+                return EXIT_FAILURE;
+            }
+
+            close(fd);
+
+
+        }
+    }
+    
+
+    return 0;
+}

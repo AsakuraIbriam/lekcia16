@@ -1,0 +1,51 @@
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+
+
+
+int main(int argc, char*argv[]){
+
+
+
+    if(argc == 1) {
+        fprintf(stderr, "Not enough arguments...EXITING\n");
+        exit(1);
+    }
+
+    for(int j = 1; j < argc; j++) {
+        int fd = open(argv[j], O_RDONLY);
+
+
+         int n = -1
+         int i = 0;
+         int k = 0;
+         char c;
+         char buff[250];
+         lseek(fd,n,SEEK_END);
+            while(k <= 10) {
+                read(fd, &c, 1);
+                if(c == '\n') {
+                    k++;
+                }
+                buff[i] = c;
+                i++;
+                n--;
+                lseek(fd,n,SEEK_END);
+                }
+                i++;
+            buff[i] = '\0';
+            
+        reverseStr(buff);
+	buff[i] = '\0';
+        write(1, buff, i);
+
+        close(fd);
+    }
+
+    return 0;
+}

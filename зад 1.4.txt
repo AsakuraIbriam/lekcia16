@@ -1,0 +1,65 @@
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <time.h>
+#include <signal.h>
+#include <pthread.h>
+#include <dirent.h>
+
+int main(int argc, char *argv[]) {
+
+    if(agc != 3) {
+        fprintf(stderr, "Wrong arguments number\n");
+        exit(-1);
+    }
+
+    DIR *dr;
+    dr = opendir(argv[2]);
+    
+
+    if(dr == NULL) {
+        perror("Couldnt open the directory for copying the file\n");
+        exit(-1);
+    }
+    
+
+    int fddr;
+    if((fddr = dirfd(dr)) < 0) {
+        perror("Couldnt open the directory path where the file is gonna get coppied");
+        exit(-1;)
+    }
+    int fd1;
+    if((fd1 = open(argv[1], O_RDONLY)) < 0) {
+        perror("Couldnt open the file descriptor of the file which is to be copied\n");
+        exit(-1);
+    }
+    char buff[1001];
+    int i = 0;
+    while((1 == read(fd1, buff, 1)) && (i < 1000)) {
+        i++;
+    }
+    buff[i] = '\0';
+    close(fd1);
+
+    int fd2;
+    if((fd2 = openat(dr, argv[1], O_WRONLY | O_CREAT)) < 0) {
+        perror("Eror at copying the file\n");
+        exit(-1);
+    }
+
+    if(write(fd2, buff, 1001)!= 1001){
+        perror("Couldnt copy the content of the entire file into the copied file\n")
+        exit(-1);
+    }
+
+    close(fd2);
+    closedir(dr);
+
+    return 0; 
+}
